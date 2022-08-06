@@ -26,11 +26,11 @@ public class GameField extends JPanel implements ActionListener {
     private boolean right = true;
     private boolean up = false;
     private boolean down = false;
-    private boolean inGame = true;
+    public boolean inGame = true;
     private boolean mouthClose = true;
     private int framesCount = 0;
     ArrayList<String> endGamePic = new ArrayList<>();
-    public String s ="";
+    public String s = "";
     private int score = 0;
 
     public GameField() {
@@ -39,8 +39,6 @@ public class GameField extends JPanel implements ActionListener {
         initGame();
         addKeyListener(new FieldKeyListener());
         setFocusable(true);
-
-
     }
 
     public void initGame() {
@@ -103,7 +101,6 @@ public class GameField extends JPanel implements ActionListener {
                 g.drawImage(cage, 0, i, this);
             }
         } else {
-            EndGame();
             g.drawImage(new ImageIcon(s).getImage(), 150, 150, null);
         }
     }
@@ -135,9 +132,10 @@ public class GameField extends JPanel implements ActionListener {
             checkApple();
             checkCollisions();
             move();
+        } else {
+            EndGame();
         }
         repaint();
-
     }
 
     private void checkCollisions() {
@@ -176,31 +174,28 @@ public class GameField extends JPanel implements ActionListener {
                 left = true;
                 up = false;
                 down = false;
-
             }
             if (key == KeyEvent.VK_RIGHT && !left) {
                 right = true;
                 up = false;
                 down = false;
-
             }
             if (key == KeyEvent.VK_UP && !down) {
                 right = false;
                 up = true;
                 left = false;
-
             }
             if (key == KeyEvent.VK_DOWN && !up) {
                 right = false;
                 down = true;
                 left = false;
-
             }
 
         }
     }
 
     public void EndGame() {
+
         endGamePic.add("pupinEndGame1.png");
         endGamePic.add("pupinEndGame2.png");
         endGamePic.add("pupinEndGame3.png");
@@ -210,14 +205,12 @@ public class GameField extends JPanel implements ActionListener {
         add(restart);
         restart.setVisible(true);
         restart.setBounds(137, 450, 250, 40);
-        restart.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == restart) {
-                    s = "restart";
-                    inGame = true;
-
-                }
+        restart.addActionListener(e -> {
+            if (e.getSource() == restart) {
+                inGame = true;
+                mainWindow.mw.dispose();
+                mainWindow.mw = new mainWindow();
+                score = 0;
             }
         });
     }
